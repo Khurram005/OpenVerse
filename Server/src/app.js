@@ -2,11 +2,13 @@ import "dotenv/config";
 import express from "express";
 import { connectDb } from "./db/config.js";
 import dbInit from "./db/init.js";
+import allRouter from "./Router/AllRouter.js";
 
 const PORT = process.env.PORT;
 
 const app = express();
 app.use(express.json());
+
 // Db connection and sync
 connectDb();
 dbInit()
@@ -16,6 +18,8 @@ dbInit()
   .catch((error) => {
     console.log(error);
   });
+
+app.use("/api", allRouter)
 
 app.listen(PORT, (error) => {
   if (!error) {
