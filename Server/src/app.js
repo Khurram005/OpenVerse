@@ -1,8 +1,10 @@
 import "dotenv/config";
 import express from "express";
-import { connectDb } from "./db/config.js";
+import sequelize, { connectDb } from "./db/config.js";
 import dbInit from "./db/init.js";
 import allRouter from "./Router/AllRouter.js";
+import Session from "express-session";
+import SequelizeStore from "connect-session-sequelize";
 
 const PORT = process.env.PORT;
 
@@ -19,7 +21,25 @@ dbInit()
     console.log(error);
   });
 
-app.use("/api", allRouter)
+// session management
+const mySequelizeStore = new SequelizeStore(Session.Store);
+const mySequelizeStore1 = new mySequelizeStore({ db: sequelize });
+mySequelizeStore1.sync();
+
+app.use(
+  Session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    store: mySequelizeStore1,
+    cookie: {
+      httpOnly: true,
+      maxAge: 1000 * 60 * 60 * 24 * 30, //one month expiration
+    },
+  })
+);
+
+app.use("/api", allRouter);
 
 app.listen(PORT, (error) => {
   if (!error) {
