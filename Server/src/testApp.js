@@ -1,26 +1,26 @@
-import "dotenv/config"
+import 'dotenv/config'
 import express from "express";
-import session from "express-session"; // Using express-session's in-memory store
-import allRouter from "./Router/AllRouter.js"; // Adjust path if necessary
+import session from "express-session"
+import allRouter from '../src/Router/AllRouter.js'
 
-const testApp = express();
-testApp.use(express.json());
+const app = express();
 
-// Use in-memory store for sessions during tests
-testApp.use(
+app.use(express.json());
+
+app.use(
   session({
-    secret: process.env.SESSION_SECRET || "testsecret", // fallback secret
+    secret: process.env.SESSION_SECRET || "testsecret",
     resave: false,
-    saveUninitialized: true, // Session state stored in memory during tests
-    store: new session.MemoryStore(), // In-memory session store for tests
+    saveUninitialized: true,
     cookie: {
+      secure: false, // must be false in tests
       httpOnly: true,
-      maxAge: 1000 * 60 * 60 * 24 * 30, // one month expiration
+      maxAge: 30 * 24 * 60 * 60 * 1000,
     },
   })
 );
 
-// Use your original routes
-testApp.use("/api", allRouter);
+// Routes
+app.use("/api", allRouter);
 
-export default testApp;
+export default app;

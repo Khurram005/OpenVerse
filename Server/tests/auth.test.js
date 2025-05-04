@@ -5,7 +5,7 @@ import { connectDb } from "../src/db/config.js";
 import dbInit from "../src/db/init.js";
 
 beforeAll(async () => {
-  connectDb();
+  await connectDb();
   await dbInit();
 });
 
