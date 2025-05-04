@@ -7,8 +7,8 @@
   "scripts": {
     "dev": "nodemon src/app.js",
     "test": "jest",
-    "test:auth": "jest tests/auth.test.js",
-    "test:search-history":"jest tests/searchHistory.test.js"
+    "test:auth": "jest Test/TestCases/auth.test.js",
+    "test:search-history":"jest Test/TestCases/searchHistory.test.js"
   },
   "author": "",
   "license": "ISC",

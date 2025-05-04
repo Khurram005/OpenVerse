@@ -6,6 +6,7 @@ const AuthController = {
       await AuthService.registerUser(req);
       return res.status(201).json({ message: "User created successfully" });
     } catch (error) {
+      console.error("Registration Error:", error); 
       return res
         .status(error.status || 500)
         .json({ message: error.message || "Internal server error" });

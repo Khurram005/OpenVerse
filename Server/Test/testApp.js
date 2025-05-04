@@ -3,11 +3,11 @@ import express from "express";
 import session from "express-session"
 import allRouter from '../src/Router/AllRouter.js'
 
-const app = express();
+const testApp = express();
 
-app.use(express.json());
+testApp.use(express.json());
 
-app.use(
+testApp.use(
   session({
     secret: process.env.SESSION_SECRET || "testsecret",
     resave: false,
@@ -21,6 +21,6 @@ app.use(
 );
 
 // Routes
-app.use("/api", allRouter);
+testApp.use("/api", allRouter);
 
-export default app;
+export default testApp;
