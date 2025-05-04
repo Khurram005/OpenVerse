@@ -1,16 +1,16 @@
 import request from "supertest";
-import app from '../src/testApp.js'
-import clearUsers from "../src/Clear/ClearUsers.js"
-import { connectDb } from "../src/db/config.js";
-import dbInit from "../src/db/init.js";
+import app from "../testApp.js";
+import { setupTestDb } from "../utils/sharedUtils.js";
+import { connectDb } from "../../src/db/config.js";
+import dbInit from "../../src/db/init.js";
+import clearUsers from "../Clear/ClearUsers.js";
 
 beforeAll(async () => {
-  await connectDb();
-  await dbInit();
+  await setupTestDb({ connectDb, dbInit, clearUsers });
 });
 
 afterAll(async () => {
-  await clearUsers(); // final cleanup after all tests
+  await clearUsers();
 });
 
 describe("Auth Flow: Register and Login", () => {
