@@ -96,7 +96,7 @@ ORIGIN = http://localhost:5173
 
 ### Backend Setup
 
-`cd backend`
+`cd Server`
 
 `npm install`
 
@@ -104,7 +104,7 @@ ORIGIN = http://localhost:5173
 
 ### Frontend Setup
 
-`cd frontend`
+`cd Client`
 
 `npm install`
 
