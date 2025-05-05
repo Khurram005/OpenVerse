@@ -18,4 +18,10 @@ SearchHistoryRouter.get(
   SearchHistoryController.getAllSearchHistory
 );
 
+SearchHistoryRouter.get(
+  "/:searchId",
+  AuthMiddleware,
+  SearchHistoryController.getSingleSearchHistory
+);
+
 export default SearchHistoryRouter;

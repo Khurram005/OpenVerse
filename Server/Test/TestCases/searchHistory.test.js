@@ -7,6 +7,7 @@ import clearUsers from "../Clear/ClearUsers.js";
 
 let token;
 let cookie;
+let savedSearchId;
 
 beforeAll(async () => {
   await setupTestDb({ connectDb, dbInit, clearUsers });
@@ -25,8 +26,8 @@ describe("Search History API", () => {
   it("should save a search query for logged in user", async () => {
     const res = await request(app)
       .post("/api/search-history")
-      .set("Authorization", `Bearer ${token}`)  // Send token in headers
-      .set("Cookie", cookie)                    // Send cookie
+      .set("Authorization", `Bearer ${token}`) // Send token in headers
+      .set("Cookie", cookie) // Send cookie
       .send({ query: "openverse sunset" });
 
     expect(res.statusCode).toBe(201);
@@ -72,6 +73,8 @@ describe("Search History API", () => {
     expect(Array.isArray(res.body.data)).toBe(true);
     expect(res.body.data.length).toBeGreaterThan(0);
     expect(res.body.data[0]).toHaveProperty("query");
+    // Save one searchId for next test
+    savedSearchId = res.body.data[0].id;
   });
 
   it("should return 401 when fetching search history without auth", async () => {
@@ -80,5 +83,34 @@ describe("Search History API", () => {
     expect(res.statusCode).toBe(401);
     expect(res.body.message).toBe("Unauthorized");
   });
-  
+
+  it("should fetch a single search history item by ID", async () => {
+    const res = await request(app)
+      .get(`/api/search-history/${savedSearchId}`)
+      .set("Authorization", `Bearer ${token}`)
+      .set("Cookie", cookie);
+
+    expect(res.statusCode).toBe(200);
+    expect(res.body.message).toBe("Search fetched successfully");
+    expect(res.body.search).toHaveProperty("id", savedSearchId);
+    expect(res.body.search).toHaveProperty("query");
+  });
+
+  it("should return 401 for unauthenticated single search fetch", async () => {
+    const res = await request(app).get(`/api/search-history/${savedSearchId}`);
+
+    expect(res.statusCode).toBe(401);
+    expect(res.body.message).toBe("Unauthorized");
+  });
+
+  it("should return 404 for invalid search ID", async () => {
+    const res = await request(app)
+      .get("/api/search-history/9999999") // assuming this doesn't exist
+      .set("Authorization", `Bearer ${token}`)
+      .set("Cookie", cookie);
+
+    // Depends on whether your service throws 404 for missing searches
+    expect(res.statusCode).toBe(404);
+    expect(res.body.message).toMatch("No such history exist");
+  });
 });
