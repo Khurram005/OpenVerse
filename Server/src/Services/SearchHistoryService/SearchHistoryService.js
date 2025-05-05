@@ -69,6 +69,38 @@ const SearchHistoryService = {
       throw error;
     }
   },
+
+  deleteAllSearchHistory: async (req) => {
+    try {
+      const userId = req.session.user.id;
+      // check if user exists
+      const checkUser = await UserModel.findByPk(userId);
+      if (!checkUser) {
+        const error = new Error("User not found");
+        error.status = 404;
+        throw error;
+      }
+      await SavedSearchModel.destroy({ where: userId });
+    } catch (error) {}
+  },
+
+  deleteSingleSearchHistory: async (req, searchId) => {
+    try {
+      const userId = req.session.user.id;
+      // check if user exists
+      const checkUser = await UserModel.findByPk(userId);
+      if (!checkUser) {
+        const error = new Error("User not found");
+        error.status = 404;
+        throw error;
+      }
+      await SavedSearchModel.destroy({
+        where: { id: searchId, userId },
+      });
+    } catch (error) {
+      throw error;
+    }
+  },
 };
 
 export default SearchHistoryService;

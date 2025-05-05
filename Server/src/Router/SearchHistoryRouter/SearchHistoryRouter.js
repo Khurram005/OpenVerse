@@ -24,4 +24,16 @@ SearchHistoryRouter.get(
   SearchHistoryController.getSingleSearchHistory
 );
 
+SearchHistoryRouter.delete(
+  "/:searchId",
+  AuthMiddleware,
+  SearchHistoryController.deleteSingleSearchHistory
+);
+
+SearchHistoryRouter.delete(
+  "/",
+  AuthMiddleware,
+  SearchHistoryController.deleteAllSearchHistory
+);
+
 export default SearchHistoryRouter;

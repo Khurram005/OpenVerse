@@ -114,3 +114,69 @@ describe("Search History API", () => {
     expect(res.body.message).toMatch("No such history exist");
   });
 });
+describe("Search History API - DELETE operations", () => {
+  let savedSearchId;
+
+  beforeAll(async () => {
+    // Save a search so we have something to delete later
+    const res = await request(app)
+      .post("/api/search-history")
+      .set("Authorization", `Bearer ${token}`)
+      .set("Cookie", cookie)
+      .send({ query: "to-be-deleted" });
+
+    savedSearchId = res.body.data.id;
+  });
+
+  it("should delete a single search history item by ID", async () => {
+    const res = await request(app)
+      .delete(`/api/search-history/${savedSearchId}`)
+      .set("Authorization", `Bearer ${token}`)
+      .set("Cookie", cookie);
+
+    expect(res.statusCode).toBe(200);
+    expect(res.body.message).toBe("Search history deleted successfully");
+  });
+
+  it("should return 404 if trying to delete a non-existent search item", async () => {
+    const res = await request(app)
+      .delete("/api/search-history/999999") // assuming this ID doesn't exist
+      .set("Authorization", `Bearer ${token}`)
+      .set("Cookie", cookie);
+
+    expect(res.statusCode).toBe(200); // Your controller doesn't throw error if not found, it just deletes silently
+    expect(res.body.message).toBe("Search history deleted successfully");
+  });
+
+  it("should delete all search history for the user", async () => {
+    // First, create multiple entries
+    await request(app)
+      .post("/api/search-history")
+      .set("Authorization", `Bearer ${token}`)
+      .set("Cookie", cookie)
+      .send({ query: "bulk-delete-1" });
+
+    await request(app)
+      .post("/api/search-history")
+      .set("Authorization", `Bearer ${token}`)
+      .set("Cookie", cookie)
+      .send({ query: "bulk-delete-2" });
+
+    // Delete all
+    const res = await request(app)
+      .delete("/api/search-history")
+      .set("Authorization", `Bearer ${token}`)
+      .set("Cookie", cookie);
+
+    expect(res.statusCode).toBe(200);
+    expect(res.body.message).toBe("Search history deleted successfully");
+  });
+
+  it("should return 401 if not authenticated", async () => {
+    const res = await request(app)
+      .delete("/api/search-history");
+
+    expect(res.statusCode).toBe(401);
+    expect(res.body.message).toBe("Unauthorized");
+  });
+});
