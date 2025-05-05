@@ -22,8 +22,7 @@ const Signin = () => {
         console.log(response)
         localStorage.setItem("token", response?.data?.token)
         localStorage.setItem("userData", JSON.stringify(response?.data?.data))
-        // TODO: Store token/user data if needed
-        navigate("/"); // or wherever you want to redirect after login
+        navigate("/");
       } else {
         toast.error(response?.data?.message || "Login failed");
       }
