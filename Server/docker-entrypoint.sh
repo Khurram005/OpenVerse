@@ -8,8 +8,11 @@ done
 echo "PostgreSQL started"
 
 echo "Resetting the database..."
-npx sequelize-cli db:drop
-npx sequelize-cli db:create
+PGPASSWORD=$DB_PASSWORD psql -h "$DB_HOST" -U "$DB_USER" -p 5432 -d postgres <<EOF
+DROP DATABASE IF EXISTS openverse;
+CREATE DATABASE openverse;
+GRANT ALL PRIVILEGES ON DATABASE openverse TO postgres;
+EOF
 
 npm run dev &
 DEV_PID=$!
