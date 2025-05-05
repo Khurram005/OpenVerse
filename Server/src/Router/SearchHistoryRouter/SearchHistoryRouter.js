@@ -12,4 +12,10 @@ SearchHistoryRouter.post(
   SearchHistoryController.saveSearchHistory
 );
 
+SearchHistoryRouter.get(
+  "/",
+  AuthMiddleware,
+  SearchHistoryController.getAllSearchHistory
+);
+
 export default SearchHistoryRouter;

@@ -53,4 +53,32 @@ describe("Search History API", () => {
     expect(res.statusCode).toBe(401);
     expect(res.body.message).toBe("Unauthorized");
   });
+
+  it("should fetch all search history for logged in user", async () => {
+    // First, add a known search to ensure there is at least one
+    await request(app)
+      .post("/api/search-history")
+      .set("Authorization", `Bearer ${token}`)
+      .set("Cookie", cookie)
+      .send({ query: "openverse mountains" });
+
+    const res = await request(app)
+      .get("/api/search-history")
+      .set("Authorization", `Bearer ${token}`)
+      .set("Cookie", cookie);
+
+    expect(res.statusCode).toBe(200);
+    expect(res.body.message).toBe("Search history fetched successfully");
+    expect(Array.isArray(res.body.data)).toBe(true);
+    expect(res.body.data.length).toBeGreaterThan(0);
+    expect(res.body.data[0]).toHaveProperty("query");
+  });
+
+  it("should return 401 when fetching search history without auth", async () => {
+    const res = await request(app).get("/api/search-history");
+
+    expect(res.statusCode).toBe(401);
+    expect(res.body.message).toBe("Unauthorized");
+  });
+  
 });
