@@ -5,6 +5,7 @@ import dbInit from "./db/init.js";
 import allRouter from "./Router/AllRouter.js";
 import Session from "express-session";
 import SequelizeStore from "connect-session-sequelize";
+import cors from "cors";
 
 const PORT = process.env.PORT;
 
@@ -20,6 +21,12 @@ dbInit()
   .catch((error) => {
     console.log(error);
   });
+
+const corsInstance = new cors({
+  origin: [process.env.ORIGIN],
+  credentials: true,
+});
+app.use(corsInstance);
 
 // session management
 const mySequelizeStore = new SequelizeStore(Session.Store);
