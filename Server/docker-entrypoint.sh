@@ -8,11 +8,7 @@ done
 echo "PostgreSQL started"
 
 echo "Resetting the database..."
-PGPASSWORD=$DB_PASSWORD psql -h "$DB_HOST" -U "$DB_USER" -p 5432 -d postgres <<EOF
-DROP DATABASE IF EXISTS openverse;
-CREATE DATABASE openverse;
-GRANT ALL PRIVILEGES ON DATABASE openverse TO postgres;
-EOF
+psql -h $DB_HOST -U $DB_USER -d $DB_NAME -c "DROP DATABASE IF EXISTS openverse; CREATE DATABASE openverse; GRANT ALL PRIVILEGES on database openverse to postgres;"
 
 npm run dev &
 DEV_PID=$!

@@ -2,6 +2,8 @@ FROM node:18
 
 WORKDIR /app
 
+# Install psql
+RUN apt-get update && apt-get install -y postgresql-client
 # Install netcat
 RUN apt-get update && apt-get install -y netcat-openbsd
 
