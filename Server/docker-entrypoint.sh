@@ -19,4 +19,5 @@ kill $DEV_PID
 wait $DEV_PID
 
 echo "Starting tests..."
-npm test
+npm run test:auth
+npm run test:search-history
