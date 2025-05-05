@@ -30,6 +30,11 @@ jobs:
 
       - name: Set up Docker Compose
         run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
+
+      - name: Set up Docker Compose and run containers
+        run: |
           docker-compose -f docker-compose.yml up --build --abort-on-container-exit
 
       - name: Stop and remove containers after tests
