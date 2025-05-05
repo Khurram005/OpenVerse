@@ -10,4 +10,5 @@ done
 echo "PostgreSQL started"
 
 # Start your server (adjust as needed)
+npm run dev
 npm test  # or `npm run dev`, `npm start`, etc.
