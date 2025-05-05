@@ -28,7 +28,7 @@ services:
       DB_DIALECT: postgres
     ports:
       - "5000:5000"
-    command: ["sh", "./docker-entrypoint.sh"]
+    command: ["sh", "./Server/docker-entrypoint.sh"]
 
 volumes:
   pgdata:
