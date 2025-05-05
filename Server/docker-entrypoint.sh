@@ -1,11 +1,13 @@
 #!/bin/sh
 
-echo "Waiting for PostgreSQL at $DB_HOST:$DB_PORT..."
+echo "Waiting for PostgreSQL at $DB_HOST:5432..."
 
-while ! nc -z "$DB_HOST" "$DB_PORT"; do
+# Wait until the DB is ready
+while ! nc -z "$DB_HOST" 5432; do
   sleep 1
 done
 
 echo "PostgreSQL started"
 
-npm test  # Change to npm run dev if needed
+# Start your server (adjust as needed)
+npm test  # or `npm run dev`, `npm start`, etc.
