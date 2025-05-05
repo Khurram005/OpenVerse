@@ -1,8 +1,11 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const UserMenu = ({ user, onLogout, onViewHistory }) => {
   const [isOpen, setIsOpen] = useState(false);
   let timeoutId;
+
+  const navigate = useNavigate();
 
   const handleMouseEnter = () => {
     clearTimeout(timeoutId);

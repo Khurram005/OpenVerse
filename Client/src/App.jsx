@@ -5,7 +5,10 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import MainLayout from "./Layouts/MainLayout";
 import Home from "./Modules/Home/Pages/Home";
-import Signin from '../src/Modules/Auth/Pages/Signin'
+import Signin from "../src/Modules/Auth/Pages/Signin";
+import SearchHistory from "./Modules/SearchHistory/Pages/SearchHistory";
+import OpenverseResults from "./Modules/Openverse/Pages/OpenverseResults";
+
 const App = () => {
   return (
     <>
@@ -13,9 +16,11 @@ const App = () => {
       <Routes>
         <Route element={<MainLayout />} path="">
           <Route element={<Home />} path="" />
+          <Route element={<OpenverseResults/>} path="openverse-results" />
+          <Route element={<SearchHistory />} path="search-history" />
         </Route>
         <Route element={<Signup />} path="/register" />
-        <Route element={<Signin/>} path="/login" />
+        <Route element={<Signin />} path="/login" />
       </Routes>
     </>
   );

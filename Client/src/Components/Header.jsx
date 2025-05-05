@@ -8,11 +8,15 @@ const Header = () => {
   const loggedIn = isAuthenticated();
   const user = getUserData();
 
+  const onViewHistory = () => {
+    navigate("/search-history");
+  };
+
   return (
     <header className="w-full bg-white shadow-md px-4 py-3">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         {/* Logo/Text */}
-        <div className="text-2xl font-bold text-gray-800">Openverse</div>
+        <div onClick={() => navigate("/")} className="text-2xl font-bold text-gray-800 cursor-default">Openverse</div>
         {loggedIn ? (
           <UserMenu
             user={{ name: user.name }}
@@ -20,10 +24,7 @@ const Header = () => {
               localStorage.clear();
               window.location.href = "/login"; // or use navigate("/login");
             }}
-            onViewHistory={() => {
-              // Navigate to history page
-              console.log("Viewing history...");
-            }}
+            onViewHistory={onViewHistory}
           />
         ) : (
           <div className="space-x-2">
