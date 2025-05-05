@@ -15,7 +15,7 @@ const Header = () => {
         <div className="text-2xl font-bold text-gray-800">Openverse</div>
         {loggedIn ? (
           <UserMenu
-            user={{ name: "Umer" }}
+            user={{ name: user.name }}
             onLogout={() => {
               localStorage.clear();
               window.location.href = "/login"; // or use navigate("/login");
