@@ -1,10 +1,44 @@
-import React from "react";
+import React, { useState } from "react";
 
 const Home = () => {
+  const [query, setQuery] = useState("");
+  const [mediaType, setMediaType] = useState("all"); // 'all', 'image', 'audio'
+  const [results, setResults] = useState([]);
+
+  const handleSearch = async () => {
+    if (!query.trim()) return;
+    try {
+      let endpoint = "";
+
+      if (mediaType === "image") {
+        endpoint = `https://api.openverse.org/v1/images/?q=${query}`;
+      } else if (mediaType === "audio") {
+        endpoint = `https://api.openverse.org/v1/audio/?q=${query}`;
+      } else {
+        // Fetch both
+        const [images, audio] = await Promise.all([
+          fetch(`https://api.openverse.org/v1/images/?q=${query}`).then((res) =>
+            res.json()
+          ),
+          fetch(`https://api.openverse.org/v1/audio/?q=${query}`).then((res) =>
+            res.json()
+          ),
+        ]);
+        setResults([...images.results, ...audio.results]);
+        return;
+      }
+
+      const res = await fetch(endpoint);
+      const data = await res.json();
+      console.log(data?.results);
+      setResults(data.results);
+    } catch (error) {
+      console.error("Search failed:", error);
+    }
+  };
+
   return (
-    <div
-      className="bg-cover bg-center text-white"
-    >
+    <div className="bg-cover bg-center text-white">
       <div className="bg-black bg-opacity-80 min-h-screen flex items-center">
         <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 md:px-12 py-12 sm:py-20">
           {/* Heading */}
@@ -36,15 +70,24 @@ const Home = () => {
             </div>
             <input
               type="text"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
               placeholder="Search for content"
               className="flex-grow px-4 py-3 text-black placeholder-gray-500 focus:outline-none"
             />
-            <select className="bg-gray-100 text-gray-800 px-4 py-3 border-t sm:border-t-0 sm:border-l border-gray-300 focus:outline-none">
-              <option>All content</option>
-              <option>Images</option>
-              <option>Audio</option>
+            <select
+              value={mediaType}
+              onChange={(e) => setMediaType(e.target.value)}
+              className="bg-gray-100 text-gray-800 px-4 py-3 border-t sm:border-t-0 sm:border-l border-gray-300 focus:outline-none"
+            >
+              <option value="all">All content</option>
+              <option value="image">Images</option>
+              <option value="audio">Audio</option>
             </select>
-            <button className="bg-yellow-500 text-black px-6 py-3 hover:bg-yellow-400 transition">
+            <button
+              onClick={handleSearch}
+              className="bg-yellow-500 text-black px-6 py-3 hover:bg-yellow-400 transition"
+            >
               Search
             </button>
           </div>
