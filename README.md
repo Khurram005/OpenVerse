@@ -74,7 +74,7 @@ Create a .env file in the backend directory with the following values:
 
 ```
 #server port
-PORT = 8080
+PORT = 5000
 
 #Database
 DB_USER = ""
@@ -87,6 +87,9 @@ DB_DIALECT = ""
 # SECRET KEYS
 SESSION_SECRET = ""
 JWT_SECRET = ""
+
+# CORS Orgin
+ORIGIN = http://localhost:5173
 ```
 
 ## Running the Application
