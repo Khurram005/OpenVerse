@@ -1,0 +1,40 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:14
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: openverse
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 10s
+      retries: 5
+      timeout: 5s
+      start_period: 20s
+
+  server:
+    build:
+      context: ./Server
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DB_NAME: openverse
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_HOST: postgres  # Make sure this matches the service name in Docker Compose
+      DB_PORT: 5432
+      DB_DIALECT: postgres
+    ports:
+      - "5000:5000"
+    command: ["sh", "./docker-entrypoint.sh"]
+
+volumes:
+  pgdata:

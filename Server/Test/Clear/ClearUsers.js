@@ -6,7 +6,7 @@ const clearUsers = async () => {
     await UserModel.destroy({
       where: {
         email: {
-          [Op.in]: ["testuser@example.com", "testuser12@gmail.com"],
+          [Op.in]: ["testuser@example.com", "testuser12@example.com"],
         },
       },
     });
