@@ -28,19 +28,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Build Docker image
-        run: docker build -t test-server Server
-
-      - name: Run tests in Docker container
+      - name: Set up Docker Compose
         run: |
-          docker run --rm \
-            -e DB_NAME=openverse \
-            -e DB_USER=postgres \
-            -e DB_PASSWORD=postgres \
-            -e DB_HOST=postgres \
-            -e DB_PORT=5432 \
-            -e DB_DIALECT=postgres \
-            test-server
+          docker-compose -f docker-compose.yml up --build --abort-on-container-exit
+
+      - name: Stop and remove containers after tests
+        run: |
+          docker-compose down

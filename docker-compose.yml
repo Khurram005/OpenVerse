@@ -23,7 +23,7 @@ services:
       DB_NAME: openverse
       DB_USER: postgres
       DB_PASSWORD: postgres
-      DB_HOST: postgres
+      DB_HOST: postgres  # Make sure this matches the service name in Docker Compose
       DB_PORT: 5432
       DB_DIALECT: postgres
     ports:
