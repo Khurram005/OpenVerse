@@ -80,8 +80,10 @@ const SearchHistoryService = {
         error.status = 404;
         throw error;
       }
-      await SavedSearchModel.destroy({ where: userId });
-    } catch (error) {}
+      await SavedSearchModel.destroy({ where: { userId } });
+    } catch (error) {
+      throw error;
+    }
   },
 
   deleteSingleSearchHistory: async (req, searchId) => {
@@ -97,10 +99,10 @@ const SearchHistoryService = {
       const seacrhHistory = await SavedSearchModel.destroy({
         where: { id: searchId, userId },
       });
-      if (!seacrhHistory){
-        const error = new Error("No such history exist")
-        error.status = 404
-        throw error
+      if (!seacrhHistory) {
+        const error = new Error("No such history exist");
+        error.status = 404;
+        throw error;
       }
     } catch (error) {
       throw error;
