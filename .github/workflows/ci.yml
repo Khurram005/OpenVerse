@@ -26,6 +26,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Build client app
+        working-directory: Client
+        run: |
+          npm install
+          npm run build
+
       - name: Set up Docker Compose
         run: |
           sudo apt-get update
