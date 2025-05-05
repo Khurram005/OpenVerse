@@ -28,6 +28,24 @@ const SearchHistoryController = {
       });
     }
   },
+
+  getSingleSearchHistory: async (req, res) => {
+    try {
+      const { searchId } = req.params;
+      const search = await SearchHistoryService.getSingleSearchHistory(
+        req,
+        searchId
+      );
+      res.status(200).json({
+        message: "Search fetched successfully",
+        search,
+      });
+    } catch (error) {
+      return res.status(error.status || 500).json({
+        message: error.message || "Internal server error",
+      });
+    }
+  },
 };
 
 export default SearchHistoryController;
