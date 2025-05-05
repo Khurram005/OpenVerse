@@ -143,9 +143,8 @@ describe("Search History API - DELETE operations", () => {
       .delete("/api/search-history/999999") // assuming this ID doesn't exist
       .set("Authorization", `Bearer ${token}`)
       .set("Cookie", cookie);
-
-    expect(res.statusCode).toBe(200); // Your controller doesn't throw error if not found, it just deletes silently
-    expect(res.body.message).toBe("Search history deleted successfully");
+    expect(res.statusCode).toBe(404);
+    expect(res.body.message).toBe("No such history exist");
   });
 
   it("should delete all search history for the user", async () => {
