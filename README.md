@@ -64,7 +64,7 @@ To run this application, you need to have:
 
 1. Clone the Repository
 
-`git clone https://github.com/khurram05/UoL-SoCS-cmp9134-open-license-media.git`
+`git clone https://github.com/Khurram005/OpenVerse.git`
 
 2. Setup Environment Variables
 
