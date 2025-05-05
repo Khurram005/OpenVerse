@@ -1,6 +1,9 @@
 import React, { useState } from "react";
-
+import { isAuthenticated } from "../../../utils/auth";
+import axiosInstance from "../../../utils/axios";
 const Home = () => {
+  const isLoggedIn = isAuthenticated();
+
   const [query, setQuery] = useState("");
   const [mediaType, setMediaType] = useState("all"); // 'all', 'image', 'audio'
   const [results, setResults] = useState([]);
@@ -15,7 +18,7 @@ const Home = () => {
       } else if (mediaType === "audio") {
         endpoint = `https://api.openverse.org/v1/audio/?q=${query}`;
       } else {
-        // Fetch both
+        // fetch both
         const [images, audio] = await Promise.all([
           fetch(`https://api.openverse.org/v1/images/?q=${query}`).then((res) =>
             res.json()
@@ -25,13 +28,41 @@ const Home = () => {
           ),
         ]);
         setResults([...images.results, ...audio.results]);
+
+        // Save search history for logged-in users
+        if (isLoggedIn) {
+          const token = localStorage.getItem("token");
+          await axiosInstance.post(
+            "/api/search-history",
+            { query },
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+        }
+
         return;
       }
 
+      // If mediaType is image or audio:
       const res = await fetch(endpoint);
       const data = await res.json();
-      console.log(data?.results);
       setResults(data.results);
+
+      if (isLoggedIn) {
+        const token = localStorage.getItem("token");
+        await axiosInstance.post(
+          "/api/search-history",
+          { query },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+      }
     } catch (error) {
       console.error("Search failed:", error);
     }
